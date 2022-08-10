@@ -6,6 +6,8 @@ import 'package:flutter_todo_app/controllers/theme_controller.dart';
 import 'package:flutter_todo_app/models/task.dart';
 import 'package:flutter_todo_app/providers/notification_provider.dart';
 import 'package:flutter_todo_app/views/screens/add_task_screen.dart';
+import 'package:flutter_todo_app/views/screens/all_tasks_screen.dart';
+import 'package:flutter_todo_app/views/widgets/bottom_sheet_button.dart';
 import 'package:flutter_todo_app/views/widgets/button.dart';
 import 'package:flutter_todo_app/views/widgets/task_tile.dart';
 import 'package:get/get.dart';
@@ -74,6 +76,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       )
                     : _showTasks(context),
+                Container(
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                      onTap: () => Get.to(() => AllTasksScreen()),
+                      child: Text(
+                        'Show all tasks',
+                        style: Themes().headingTextStyle,
+                      )),
+                )
               ],
             ),
           ),
@@ -149,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Spacer(),
             task.isCompleted == 1
                 ? Container()
-                : _bottomSheetButton(
+                : BottomSheetButton(
                     label: 'Task Complete',
                     onTap: () {
                       _homeController.upDateTask(task.id.toString());
@@ -165,9 +176,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                     color: primaryColor,
-                    context: context,
                   ),
-            _bottomSheetButton(
+            BottomSheetButton(
               label: 'Delete Task',
               onTap: () {
                 _homeController.deleteTask(task.id.toString());
@@ -182,18 +192,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
               color: pinkClr,
-              context: context,
             ),
             SizedBox(
               height: 20.h,
             ),
-            _bottomSheetButton(
+            BottomSheetButton(
               label: 'Close',
               onTap: () {
                 Get.back();
               },
               color: pinkClr,
-              context: context,
               isClosed: true,
             ),
             SizedBox(
@@ -201,43 +209,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  _bottomSheetButton(
-      {required String label,
-      required Function() onTap,
-      required Color color,
-      bool isClosed = false,
-      required BuildContext context}) {
-    return GestureDetector(
-      onTap: () {
-        onTap();
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(
-          vertical: 5.h,
-        ),
-        height: 53.h,
-        width: MediaQuery.of(context).size.width * .75.w,
-        decoration: BoxDecoration(
-          color: isClosed ? Colors.transparent : color,
-          border: Border.all(
-            width: 1.w,
-            color: isClosed ? Colors.grey.shade600 : color,
-          ),
-          borderRadius: BorderRadius.circular(
-            15.r,
-          ),
-        ),
-        alignment: Alignment.center,
-        child: Text(label,
-            style: isClosed
-                ? Themes().titleStyle
-                : Themes().titleStyle.copyWith(
-                      color: Colors.white,
-                    )),
       ),
     );
   }
